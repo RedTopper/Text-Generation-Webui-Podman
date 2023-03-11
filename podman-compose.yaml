@@ -1,0 +1,24 @@
+version: "3.3"
+
+services:
+  text-generation-webui:
+    build: .
+    environment:
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+      - NVIDIA_VISIBLE_DEVICES=all
+      - CLI_ARGS=--load-in-4bit --gpu-memory 8 --listen --no-stream
+    security_opt:
+      - label=type:nvidia_container_t
+    ports:
+      - "7861:7860"
+    stdin_open: true
+    tty: true
+    volumes:
+      - /path/to/models:/data:z
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['0']
+              capabilities: [gpu]
