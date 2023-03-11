@@ -20,7 +20,7 @@ The base image is genuinely massive. It might be better to change it to somethin
 
 ## License
 
-The license in this repository only applies to the files here, not the original work at [oobabooga/text-generation-webui]([GitHub - oobabooga/text-generation-webui: A gradio web UI for running Large Language Models like GPT-J 6B, OPT, GALACTICA, LLaMA, and Pygmalion.](https://github.com/oobabooga/text-generation-webui) ). With that said:
+The license in this repository only applies to the files here, not the original work at [oobabooga/text-generation-webui](https://github.com/oobabooga/text-generation-webui). With that said:
 
 ```
     Copyright © 2023 AJ Walter <git@awalter.net>
