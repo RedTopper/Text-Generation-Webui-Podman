@@ -16,7 +16,7 @@ Edit the path `/path/to/models` in the podman-compose.yaml file.
 
 The command line arguments can be changed by modifying `CLI_ARGS` in the podman-compose.yaml file
 
-The base image is genuinely massive. It might be better to change it to something else, but hey it works.
+
 
 ## License
 
