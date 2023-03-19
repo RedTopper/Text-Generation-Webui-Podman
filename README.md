@@ -8,7 +8,7 @@ This docker file automatically builds GPTQ-for-LLaMa so you can use 4bit LLaMa m
 
 Edit the path `/path/to/models` in the podman-compose.yaml file.
 
-`podman-compose build` to pull the latest commit and build.
+`./build.sh` to pull the latest commit and build (script provides access to access GPU when building .whl for 4bit)
 
 `podman-compose up` to run the container, by default on port 7861.
 

@@ -2,15 +2,13 @@ version: "3.3"
 
 services:
   text-generation-webui:
-    build: .
+    image: text-generation-webui
     environment:
-      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
-      - NVIDIA_VISIBLE_DEVICES=all
-      - CLI_ARGS=--load-in-4bit --gpu-memory 8 --listen --no-stream
+      - CLI_ARGS=--gptq-bits 4 --gpu-memory 8 --listen --no-stream --listen-port 7861
     security_opt:
       - label=type:nvidia_container_t
     ports:
-      - "7861:7860"
+      - "7861:7861"
     stdin_open: true
     tty: true
     volumes:
