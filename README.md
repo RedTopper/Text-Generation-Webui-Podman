@@ -6,17 +6,24 @@ This docker file automatically builds GPTQ-for-LLaMa so you can use 4bit LLaMa m
 
 ## Usage
 
-Edit the path `/path/to/models` in the podman-compose.yaml file.
-
 `./build.sh` to pull the latest commit and build (script provides access to access GPU when building .whl for 4bit)
 
 `podman-compose up` to run the container, by default on port 7861.
 
+## Data
+
+`./data` and `./output` will automatically be populated with files and directories from text-generation-webui. Files are set to copy once, then never copy again if they exist. If your models are on a different drive altogether, you can still add additional mount-points, like so:
+
+```yaml
+volumes:
+  - ./data:/data:z
+  - ./output:/output:z
+  - /media/some-drive/LLaMA-HFv2:/data/models:z
+```
+
 ## Notes
 
 The command line arguments can be changed by modifying `CLI_ARGS` in the podman-compose.yaml file
-
-
 
 ## License
 
