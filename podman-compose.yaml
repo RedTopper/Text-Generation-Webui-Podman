@@ -4,15 +4,17 @@ services:
   text-generation-webui:
     image: text-generation-webui
     environment:
-      - CLI_ARGS=--gptq-bits 4 --gpu-memory 8 --listen --no-stream --listen-port 7861
+      - CLI_ARGS=--gptq-bits 4 --auto-devices --gpu-memory 8 --listen --no-stream --listen-port 7861 --extensions llama_prompts api sd_api_pictures --cai-chat
     security_opt:
       - label=type:nvidia_container_t
     ports:
       - "7861:7861"
+      - "5000:5000"
     stdin_open: true
     tty: true
     volumes:
-      - /path/to/models:/data:z
+      - ./data:/data:z
+      - ./output:/output:z
     deploy:
       resources:
         reservations:

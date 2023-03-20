@@ -25,6 +25,7 @@ ENV NVIDIA_VISIBLE_DEVICES=all
 ENV NVIDIA_DRIVER_CAPABILITIES=compute,utility
 
 VOLUME /data
+VOLUME /output
 
 RUN apt-get update \
     && apt-get install --no-install-recommends -y git python3 python3-pip \
@@ -40,7 +41,6 @@ RUN --mount=type=cache,target=/root/.cache/pip,Z pip install torch torchvision t
 RUN --mount=type=cache,target=/root/.cache/pip,Z pip install -r requirements.txt
 RUN --mount=type=cache,target=/root/.cache/pip,Z pip install /app/repositories/GPTQ-for-LLaMa/*.whl
 
-RUN rm -rf /app/models
-RUN ln -s /data /app/models
-
+COPY entrypoint.sh .
+ENTRYPOINT ["/app/entrypoint.sh"]
 CMD python3 server.py ${CLI_ARGS}
