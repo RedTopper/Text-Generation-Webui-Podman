@@ -3,9 +3,12 @@ FROM nvidia/cuda:11.7.0-devel-ubuntu22.04 as builder
 ENV NVIDIA_VISIBLE_DEVICES=all
 ENV NVIDIA_DRIVER_CAPABILITIES=compute,utility
 
-RUN apt-get update \
-    && apt-get install --no-install-recommends -y git ninja-build build-essential python3-dev python3-pip \
-    && rm -rf /var/lib/apt/lists/*
+# If you are running something modern, reducing this to 8.6 will speed up build times slightly.
+ENV TORCH_CUDA_ARCH_LIST="7.0 7.5 8.0 8.6+PTX"
+
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y git ninja-build build-essential python3-dev python3-pip && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN git clone https://github.com/qwopqwop200/GPTQ-for-LLaMa /build
 
@@ -27,9 +30,9 @@ ENV NVIDIA_DRIVER_CAPABILITIES=compute,utility
 VOLUME /data
 VOLUME /output
 
-RUN apt-get update \
-    && apt-get install --no-install-recommends -y git python3 python3-pip \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y git python3 python3-pip && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN git clone https://github.com/oobabooga/text-generation-webui /app
 

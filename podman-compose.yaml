@@ -2,9 +2,11 @@ version: "3.3"
 
 services:
   text-generation-webui:
-    image: text-generation-webui
+    build: .
     environment:
-      - CLI_ARGS=--gptq-bits 4 --auto-devices --gpu-memory 8 --listen --no-stream --listen-port 7861 --extensions llama_prompts api sd_api_pictures --cai-chat
+      - CLI_ARGS=--gptq-bits 4 --auto-devices --gpu-memory 8 --listen --no-stream --listen-port 7861 --extensions llama_prompts api sd_api_pictures --cai-chat --model llama-13b
+    # May be needed in some instances with Docker on machines with selinux
+    # privileged: true
     security_opt:
       - label=type:nvidia_container_t
     ports:
