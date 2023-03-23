@@ -1,14 +1,52 @@
-# Text Generation Webui (Podman)
+# Text Generation Webui (Podman+Docker)
 
-This repository puts [oobabooga/text-generation-webui](https://github.com/oobabooga/text-generation-webui ) into a podman container. For full usage information, see the README.md in that repository [and the wiki](https://github.com/oobabooga/text-generation-webui/wiki).
+This repository puts [oobabooga/text-generation-webui](https://github.com/oobabooga/text-generation-webui ) into a container. For full usage information, see the README.md in that repository [and the wiki](https://github.com/oobabooga/text-generation-webui/wiki).
 
-This docker file automatically builds GPTQ-for-LLaMa so you can use 4bit LLaMa models.
+This Containerfile automatically builds GPTQ-for-LLaMa so you can use 4bit LLaMa models.
 
-## Usage
+## Prerequisites
 
-`./build.sh` to pull the latest commit and build (script provides access to access GPU when building .whl for 4bit)
+A working install of `nvidia-container-runtime` 
+
+For Fedora, see: [How to enable NVIDIA GPUs in containers on bare metal in RHEL 8](https://www.redhat.com/en/blog/how-use-gpus-containers-bare-metal-rhel-8)
+
+A working install of `podman` or `docker`
+
+A working install of `podman-compose` or `docker-compose-plugin`
+
+## Podman Usage
+
+`podman-compose build` to pull the latest commit and build.
 
 `podman-compose up` to run the container, by default on port 7861.
+
+## Docker Usage
+
+`./docker.sh` will convert the Containerfile into a valid Dockerfile by removing some selinux labels (see that file for more details)
+
+`docker compose -f podman-compose.yaml build` will pull the latest commit and build using the new modified Dockerfile from the last step.
+
+`docker compose -f podman-compose.yaml up` will run the container.
+
+**Gotchas:**
+
+You will also likely need to set the default runtime. Create the following file:
+
+`cat /etc/docker/daemon.json`
+
+```json
+{
+    "runtimes": {
+        "nvidia": {
+            "path": "nvidia-container-runtime",
+            "runtimeArgs": []
+        }
+    },
+    "default-runtime": "nvidia"
+}
+```
+
+Additionally, If your machine is using `selinux`, you may need to run in privileged by setting `privileged: true` in the `podman-compose.yaml` file. This may have security ramifications beyond the scope of this setup. If you use selinux, I highly suggest running rootless with podman instead.
 
 ## Data
 
@@ -23,15 +61,8 @@ volumes:
 
 ## Notes
 
-The command line arguments can be changed by modifying `CLI_ARGS` in the podman-compose.yaml file
+The command line arguments can be changed by modifying `CLI_ARGS` in the `podman-compose.yaml` file
 
 ## License
 
 The license in this repository only applies to the files here, not the original work at [oobabooga/text-generation-webui](https://github.com/oobabooga/text-generation-webui). With that said:
-
-```
-    Copyright © 2023 AJ Walter <git@awalter.net>
-    This work is free. You can redistribute it and/or modify it under the
-    terms of the Do What The Fuck You Want To Public License, Version 2,
-    as published by Sam Hocevar. See the LICENSE file for more details.
-```
