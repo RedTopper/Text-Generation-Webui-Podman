@@ -2,8 +2,19 @@ version: "3.3"
 
 services:
   text-generation-webui:
-    build: .
+    build:
+      context: .
+      args:
+        # Use HEAD instead of a sha hash to use the latest
+        # GPTQ_SHA below is the last good commit for older models
+        - GPTQ_SHA=468c47c01b4fe370616747b6d69a2d3f48bab5e4
+        - WEBUI_SHA=HEAD
+        # If you know which specific architecture your GPU is using,
+        # specifying the exact TORCH_CUDA_ARCH_LIST version below can
+        # speed up build times slightly.
+        - "TORCH_CUDA_ARCH_LIST=7.0 7.5 8.0 8.6+PTX"
     environment:
+      # Feel free to customize CLI_ARGS. Below is an example for running 4bit llama.
       - CLI_ARGS=--gptq-bits 4 --auto-devices --gpu-memory 8 --listen --no-stream --listen-port 7861 --extensions llama_prompts api sd_api_pictures --cai-chat --model llama-13b
     # May be needed in some instances with Docker on machines with selinux
     # privileged: true
